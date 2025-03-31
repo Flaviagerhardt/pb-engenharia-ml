@@ -17,6 +17,23 @@ modelo_kobe_final/
 logs/
 *.log
 =======
+# Arquivos temporários do sistema
+.DS_Store
+*.log
+
+# Chaves e arquivos de segurança (por segurança!)
+*.pub
+Gcria*
+
+# PyCaret / MLflow
+mlruns/
+modelo_kobe_final.pkl
+
+# Ambiente virtual
+.venv/
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
