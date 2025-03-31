@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/flaviagerhardt/PB_Engenharia_ML/mlruns/0/387ff460956e402c9ff1aa0290162296/artifacts
+end_time: 1743436146140
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 387ff460956e402c9ff1aa0290162296
+run_name: PreparacaoDados
+run_uuid: 387ff460956e402c9ff1aa0290162296
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743436146124
+status: 3
+tags: []
+user_id: flaviagerhardt

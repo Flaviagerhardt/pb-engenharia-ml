@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/flaviagerhardt/PB_Engenharia_ML/mlruns/0/52d997ef5e3441cea2dacc18554af966/artifacts
+end_time: 1743426597939
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 52d997ef5e3441cea2dacc18554af966
+run_name: Treinamento
+run_uuid: 52d997ef5e3441cea2dacc18554af966
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743426597935
+status: 4
+tags: []
+user_id: flaviagerhardt

@@ -1,0 +1,62 @@
+import os
+import pandas as pd
+import mlflow
+from sklearn.model_selection import train_test_split
+
+# Definir diretórios
+raw_data_dir = "/Users/flaviagerhardt/PB_Engenharia_ML/data/raw"
+processed_data_dir = "/Users/flaviagerhardt/PB_Engenharia_ML/data/processed"
+
+# Cria o diretório de dados processados, se não existir
+os.makedirs(processed_data_dir, exist_ok=True)
+
+# Arquivos de dados
+dev_file = os.path.join(raw_data_dir, "dataset_kobe_dev.parquet")
+prod_file = os.path.join(raw_data_dir, "dataset_kobe_prod.parquet")
+
+# Carregar o dataset de desenvolvimento
+df_dev = pd.read_parquet(dev_file)
+
+import pandas as pd
+
+df_dev = pd.read_parquet("data/raw/dataset_kobe_dev.parquet")
+print("Colunas do DataFrame:", df_dev.columns.tolist())
+
+# Selecionar as colunas relevantes e remover linhas com dados faltantes
+colunas = ['lat', 'lon', 'minutes_remaining', 'period', 'playoffs', 'shot_distance', 'shot_made_flag']
+df_dev_filtered = df_dev[colunas].dropna()
+
+# Salvar o dataset filtrado
+filtered_file = os.path.join(processed_data_dir, "data_filtered.parquet")
+df_dev_filtered.to_parquet(filtered_file, index=False)
+
+# Iniciar run do MLflow para registrar parâmetros e métricas da preparação
+with mlflow.start_run(run_name="PreparacaoDados"):
+    mlflow.log_param("test_size", 0.2)
+    mlflow.log_param("colunas_selecionadas", colunas)
+    mlflow.log_metric("n_linhas_filtradas", df_dev_filtered.shape[0])
+    mlflow.log_metric("n_colunas", df_dev_filtered.shape[1])
+    
+    # Separar dados em features (X) e target (y)
+    X = df_dev_filtered.drop("shot_made_flag", axis=1)
+    y = df_dev_filtered["shot_made_flag"]
+    
+    # Divisão estratificada em treino (80%) e teste (20%)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, stratify=y, random_state=42
+    )
+    
+    # Reconstruir DataFrames de treino e teste
+    train_df = X_train.copy()
+    train_df["shot_made_flag"] = y_train
+    test_df = X_test.copy()
+    test_df["shot_made_flag"] = y_test
+    
+    # Salvar os conjuntos de treino e teste
+    train_file = os.path.join(processed_data_dir, "base_train.parquet")
+    test_file = os.path.join(processed_data_dir, "base_test.parquet")
+    train_df.to_parquet(train_file, index=False)
+    test_df.to_parquet(test_file, index=False)
+    
+    mlflow.log_metric("tamanho_treino", train_df.shape[0])
+    mlflow.log_metric("tamanho_teste", test_df.shape[0])

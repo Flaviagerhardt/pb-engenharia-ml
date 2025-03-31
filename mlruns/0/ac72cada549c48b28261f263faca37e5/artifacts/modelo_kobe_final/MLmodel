@@ -1,0 +1,21 @@
+artifact_path: modelo_kobe_final
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.6
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.4.2
+mlflow_version: 2.21.2
+model_size_bytes: 905
+model_uuid: aeba139c7d4c4abfbeeb4d6919caf249
+prompts: null
+run_id: ac72cada549c48b28261f263faca37e5
+utc_time_created: '2025-03-31 15:26:25.371032'

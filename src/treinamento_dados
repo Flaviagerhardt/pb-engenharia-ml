@@ -1,0 +1,70 @@
+import os
+import pandas as pd
+from pycaret.classification import ClassificationExperiment
+from sklearn.metrics import log_loss, f1_score
+import mlflow
+import mlflow.sklearn
+
+# Diretório base
+base_dir = "/Users/flaviagerhardt/PB_Engenharia_ML"
+processed_data_dir = os.path.join(base_dir, "data", "processed")
+
+# Caminhos dos arquivos
+train_file = os.path.join(processed_data_dir, "base_train.parquet")
+test_file = os.path.join(processed_data_dir, "base_test.parquet")
+
+# Carregar datasets
+train_df = pd.read_parquet(train_file)
+test_df = pd.read_parquet(test_file)
+
+X_test = test_df.drop("shot_made_flag", axis=1)
+y_true = test_df["shot_made_flag"]
+
+# Iniciar experimento com MLflow
+with mlflow.start_run(run_name="Treinamento"):
+
+    # Setup do experimento
+    exp = ClassificationExperiment()
+    exp.setup(
+        data=train_df,
+        target="shot_made_flag",
+        session_id=42,
+        verbose=False
+    )
+
+    # Modelo 1: Regressão Logística
+    model_lr = exp.create_model("lr")
+    tuned_lr = exp.tune_model(model_lr)
+    pred_lr = exp.predict_model(tuned_lr, data=test_df)
+
+    logloss_lr = log_loss(y_true, pred_lr["prediction_score"])
+    f1_lr = f1_score(y_true, pred_lr["prediction_label"])
+
+    mlflow.log_metric("log_loss_lr", logloss_lr)
+    mlflow.log_metric("f1_score_lr", f1_lr)
+
+    # Modelo 2: Árvore de Decisão
+    model_dt = exp.create_model("dt")
+    tuned_dt = exp.tune_model(model_dt)
+    pred_dt = exp.predict_model(tuned_dt, data=test_df)
+
+    logloss_dt = log_loss(y_true, pred_dt["prediction_score"])
+    f1_dt = f1_score(y_true, pred_dt["prediction_label"])
+
+    mlflow.log_metric("log_loss_dt", logloss_dt)
+    mlflow.log_metric("f1_score_dt", f1_dt)
+
+    # Escolher melhor modelo
+    if f1_dt > f1_lr:
+        final_model = tuned_dt
+        mlflow.log_param("modelo_escolhido", "decision_tree")
+    else:
+        final_model = tuned_lr
+        mlflow.log_param("modelo_escolhido", "logistic_regression")
+
+    # Salvar e registrar modelo
+    exp.save_model(final_model, os.path.join(base_dir, "modelo_kobe_final"))
+    mlflow.sklearn.log_model(final_model, "modelo_kobe_final")
+
+    print("✅ Modelo final treinado e salvo com sucesso.")
+
