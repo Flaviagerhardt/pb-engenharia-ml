@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+.ipynb_checkpoints/
+
+# Dados
+/data/processed/
+mlruns/
+modelo_kobe_final/
+
+# Streamlit e logs
+logs/
+*.log
