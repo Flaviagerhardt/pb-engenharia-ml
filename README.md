@@ -67,7 +67,7 @@ Esta estrutura segue boas práticas de organização de projetos de ciência de 
 
 Segue abaixo um diagrama de fluxo que mostra como os dados e processos se conectam, desde a preparação dos dados até a aplicação em produção e monitoramento, dividido em fases de desenvolvimento e produção.
 
-![alt text](image.png)
+![diagrama de fluxo](/Users/flaviagerhardt/PB_Engenharia_ML/data/Imagem/processo.png)
 
 ### 1. Preparação de Dados
 - **Objetivo**: Preparar os dados para treinamento do modelo.
