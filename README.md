@@ -5,7 +5,7 @@
 Projeto de Engenharia de Machine Learning para predição de arremessos de Kobe Bryant, utilizando PyCaret, MLflow, Scikit-Learn e Streamlit.
 Desenvolvido com foco em MLOps, versionamento de experimentos, deploy de modelos e visualização de resultados.
 
-## COmo Executar o Projeto
+## Como Executar o Projeto
 
 ### Pré-requisitos
 
@@ -111,26 +111,22 @@ PB_ENGENHARIA_ML/
             base_train.parquet      # Conjunto de treino
             data_filtered.parquet   # Dados filtrados
             predicoes_producao.parquet # Predições em produção
-
     raw/                            # Dados brutos (originais)
         dataset_kobe_dev.parquet    # Dataset de desenvolvimento
             dataset_kobe_prod.parquet # Dataset de produção
-
     mlruns/                         # Diretório do MLflow para tracking de experimentos
-
     src/                            # Código-fonte do projeto
         aplicacao.py                # Script para aplicação do modelo em produção
         dashboard.py                # Dashboard Streamlit para monitoramento
         preparacao_dados            # Script para preparação e pré-processamento dos dados
         treinamento_dados           # Script para treinamento e avaliação de modelos
-
     .gitignore                      # Arquivo de configuração do Git
     Dashboard Kobe Bryant.pdf       # pdf do streamlit gerado
     logs.log                        # Arquivo de logs do sistema
     modelo_kobe_final.pkl           # Modelo serializado final
     README.md                       # Documentação do projeto
     requirements.txt                # Dependências do projeto
-
+    
 ## Descrição dos Componentes
 
 ### Diretórios de Dados
