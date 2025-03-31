@@ -2,7 +2,103 @@
 
 ## Visão Geral
 
-Este projeto tem como objetivo construir um sistema de previsão para identificar se um arremesso realizado pelo astro da NBA **Kobe Bryant** resultou em cesta ou não. O projeto aborda a **Engenharia de Machine Learning** de forma completa, desde a ingestão dos dados até a operação e monitoramento de modelos.
+Projeto de Engenharia de Machine Learning para predição de arremessos de Kobe Bryant, utilizando PyCaret, MLflow, Scikit-Learn e Streamlit.
+Desenvolvido com foco em MLOps, versionamento de experimentos, deploy de modelos e visualização de resultados.
+
+## COmo Executar o Projeto
+
+### Pré-requisitos
+
+Python 3.9+ instalado
+Git instalado (para clonar o repositório, se necessário)
+pip ou conda para instalar as dependências
+
+### Configuração do Ambiente
+
+1. Clone este repositório
+
+git clone https://github.com/Flaviagerhardt/pb-engenharia-ml.git
+cd pb-engenharia-ml
+
+
+2. Crie um ambiente virtual (opcional, mas recomendado)
+
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+
+3. Instale as dependências
+
+pip install -r requirements.txt
+
+### Execução do Pipeline
+
+O projeto está estruturado em três etapas principais que devem ser executadas na seguinte ordem:
+
+1. Preparação dos Dados
+Este script carrega os dados brutos, realiza a limpeza, seleção de features e divide os dados em conjuntos de treino e teste.
+
+-Navegue até o diretório do projeto
+cd PB_Engenharia_ML
+
+-Execute o script de preparação de dados
+python src/preparacao_dados
+
+Após a execução, os seguintes arquivos serão gerados:
+
+data/processed/data_filtered.parquet: Dados filtrados
+data/processed/base_train.parquet: Conjunto de treino
+data/processed/base_test.parquet: Conjunto de teste
+
+O MLflow registrará esta execução com o nome "PreparacaoDados".
+
+2. Treinamento do Modelo
+
+Este script treina dois modelos (regressão logística e árvore de decisão), compara suas performances e seleciona o melhor.
+
+-Execute o script de treinamento
+python src/treinamento_dados
+
+Após a execução:
+
+O modelo final será salvo como modelo_kobe_final.pkl
+O MLflow registrará métricas como F1 Score e Log Loss para ambos os modelos
+O run será nomeado como "Treinamento"
+
+3. Aplicação em Produção
+
+Este script aplica o modelo treinado em dados de produção.
+
+-Execute o script de aplicação
+python src/aplicacao.py
+
+Após a execução:
+
+As predições serão salvas em data/processed/predicoes_producao.parquet
+Métricas de desempenho em produção serão registradas no MLflow
+
+4. Monitoramento com Dashboard
+
+Para visualizar os resultados e monitorar o desempenho do modelo:
+
+-Execute o dashboard Streamlit
+streamlit run src/dashboard.py
+
+O dashboard será aberto automaticamente no seu navegador web padrão, geralmente em http://localhost:8501.
+
+### Consulta de Experimentos no MLflow
+
+Para visualizar os experimentos, métricas e artefatos registrados:
+
+-Inicie a interface web do MLflow
+mlflow ui
+
+Acesse http://localhost:5000 no seu navegador para explorar:
+
+Runs de preparação de dados
+Comparações de modelos
+Métricas de desempenho
+Artefatos gerados
 
 ## Estrutura do Projeto
 
@@ -67,6 +163,8 @@ Esta estrutura segue boas práticas de organização de projetos de ciência de 
 
 Segue abaixo um diagrama de fluxo que mostra como os dados e processos se conectam, desde a preparação dos dados até a aplicação em produção e monitoramento, dividido em fases de desenvolvimento e produção.
 
+![diagrama de fluxo](data/Imagem/Etapas.png)
+
 ![diagrama de fluxo](data/Imagem/processo.png)
 
 ### 1. Preparação de Dados
@@ -84,6 +182,10 @@ Segue abaixo um diagrama de fluxo que mostra como os dados e processos se conect
 - Número de colunas: 7
 - Tamanho do conjunto de treino: 16.228
 - Tamanho do conjunto de teste: 4.057
+- Colunas selecionadas: 'lat', 'lon', 'minutes_remaining', 'period', 'playoffs', 'shot_distance', 'shot_made_flag'
+
+![diagrama de fluxo](data/Imagem/mlflow_preparacaodados_2.png)
+![diagrama de fluxo](data/Imagem/mlflow_preparacaodados.png)
 
 ### 2. Treinamento do Modelo
 - **Objetivo**: Treinar e avaliar diferentes modelos para prever os arremessos.
@@ -97,6 +199,11 @@ Segue abaixo um diagrama de fluxo que mostra como os dados e processos se conect
      - F1 Score: 0,4373
 - **Modelo escolhido**: Regressão Logística (melhor F1 Score)
 - **Armazenamento**: O modelo final é salvo utilizando PyCaret e registrado no MLflow para rastreamento.
+
+![diagrama de fluxo](data/Imagem/treinamento_result_1.png)
+![diagrama de fluxo](data/Imagem/mlflow_treinamento_geral.png)
+![diagrama de fluxo](data/Imagem/mlflow_treinamento.png)
+![diagrama de fluxo](data/Imagem/mlflow_treinamento_2.png)
 
 ### 3. Aplicação em Produção
 - **Objetivo**: Aplicar o modelo treinado em dados de produção.
@@ -112,6 +219,9 @@ Segue abaixo um diagrama de fluxo que mostra como os dados e processos se conect
 - Log Loss em produção: 0,9058
 - F1 Score em produção: 0
 
+![diagrama de fluxo](data/Imagem/mlflow_pipelineaplicacao.png)
+![diagrama de fluxo](data/Imagem/mlflow_pipelineaplicacao.png)
+
 ### 4. Monitoramento
 - **Objetivo**: Monitorar o desempenho do modelo em produção.
 - **Implementação**: Dashboard interativo em `src/dashboard.py` usando Streamlit.
@@ -122,3 +232,4 @@ Segue abaixo um diagrama de fluxo que mostra como os dados e processos se conect
   - Mapa de arremessos (visualização espacial)
   - Suporte para upload de novos arquivos de previsão
 
+![diagrama de fluxo](Dashboard Kobe Bryant.pdf)
